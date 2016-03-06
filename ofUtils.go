@@ -31,3 +31,12 @@ func MD5(text string) string {
 func ToString(str interface{}) string {
 	return fmt.Sprintf("%v", str)
 }
+
+func ToInt(val interface{}) int {
+	i, ok := val.(int)
+	if ok {
+		return i
+	} else {
+		return 0
+	}
+}
