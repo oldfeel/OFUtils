@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"math/rand"
+	"strconv"
 	"time"
 )
 
@@ -33,6 +34,14 @@ func ToString(str interface{}) string {
 }
 
 func ToInt(val interface{}) int {
+	s, ok := val.(string)
+	if ok {
+		i, err := strconv.Atoi(s)
+		if err != nil {
+			return 0
+		}
+		return i
+	}
 	i, ok := val.(int)
 	if ok {
 		return i
