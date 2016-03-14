@@ -5,8 +5,11 @@ import (
 	"encoding/hex"
 	"fmt"
 	"math/rand"
+	"sort"
 	"strconv"
 	"time"
+
+	"github.com/astaxie/beego/orm"
 )
 
 func init() {
@@ -48,4 +51,55 @@ func ToInt(val interface{}) int {
 	} else {
 		return 0
 	}
+}
+
+func GetWeekFirstDay() string {
+	week := time.Now().Weekday().String()
+	var day time.Duration
+	switch week {
+	case "Sunday":
+		day = 6
+		break
+	case "Monday":
+		day = 0
+		break
+	case "Tuesday":
+		day = 1
+		break
+	case "Wednesday":
+		day = 2
+		break
+	case "Thursday":
+		day = 3
+		break
+	case "Friday":
+		day = 4
+		break
+	case "Saturday":
+		day = 5
+		break
+	}
+	date := time.Now().Add(-day * 24 * time.Hour)
+	return date.Format("2006-01-02")
+}
+
+type ByKey struct {
+	Key  string
+	List []orm.Params
+}
+
+func (a ByKey) Len() int {
+	return len(a.List)
+}
+func (a ByKey) Swap(i, j int) {
+	a.List[i], a.List[j] = a.List[j], a.List[i]
+}
+func (a ByKey) Less(i, j int) bool {
+	return ToInt(a.List[i][a.Key]) > ToInt(a.List[j][a.Key])
+}
+
+func Sort(list []orm.Params, key string) []orm.Params {
+	byKey := ByKey{List: list, Key: key}
+	sort.Sort(byKey)
+	return byKey.List
 }
