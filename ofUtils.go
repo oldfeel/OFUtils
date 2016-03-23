@@ -123,3 +123,11 @@ func SubString(str string, begin, length int) (substr string) {
 	// 返回子串
 	return string(rs[begin:end])
 }
+
+func ToFloat(str string) float64 {
+	tf, err := strconv.ParseFloat(str, 64)
+	if err != nil {
+		return 0
+	}
+	return tf
+}
