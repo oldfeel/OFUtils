@@ -131,3 +131,12 @@ func ToFloat(str string) float64 {
 	}
 	return tf
 }
+func GetEncryptPhone(phone interface{}) string {
+	temp := ToString(phone)
+	if len(temp) == 11 {
+		start := SubString(temp, 0, 3)
+		end := SubString(temp, 7, 11)
+		temp = start + "****" + end
+	}
+	return temp
+}
