@@ -33,10 +33,16 @@ func MD5(text string) string {
 }
 
 func ToString(str interface{}) string {
+	if str == nil {
+		return ""
+	}
 	return fmt.Sprintf("%v", str)
 }
 
 func ToInt(val interface{}) int {
+	if val == nil {
+		return 0
+	}
 	s, ok := val.(string)
 	if ok {
 		i, err := strconv.Atoi(s)
@@ -124,8 +130,11 @@ func SubString(str string, begin, length int) (substr string) {
 	return string(rs[begin:end])
 }
 
-func ToFloat(str string) float64 {
-	tf, err := strconv.ParseFloat(str, 64)
+func ToFloat(str interface{}) float64 {
+	if str == nil {
+		return 0
+	}
+	tf, err := strconv.ParseFloat(ToString(str), 64)
 	if err != nil {
 		return 0
 	}
