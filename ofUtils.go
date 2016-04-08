@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	"math/rand"
+	"os"
 	"sort"
 	"strconv"
 	"time"
@@ -148,4 +149,8 @@ func GetEncryptPhone(phone interface{}) string {
 		temp = start + "****" + end
 	}
 	return temp
+}
+func Exist(filename string) bool {
+	_, err := os.Stat(filename)
+	return err == nil || os.IsExist(err)
 }
