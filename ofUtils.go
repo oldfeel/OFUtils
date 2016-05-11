@@ -3,6 +3,7 @@ package ofutils
 import (
 	"crypto/md5"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"math/rand"
 	"os"
@@ -140,6 +141,10 @@ func ToFloat(str interface{}) float64 {
 		return 0
 	}
 	return tf
+}
+func ToJson(datas interface{}) string {
+	jsonString, _ := json.Marshal(datas)
+	return string(jsonString)
 }
 func GetEncryptPhone(phone interface{}) string {
 	temp := ToString(phone)
