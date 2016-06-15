@@ -176,3 +176,9 @@ func SendMail(user, password, host, to, subject, body, mailtype string) error {
 	err := smtp.SendMail(host, auth, user, send_to, msg)
 	return err
 }
+func ZeroBefore(i int) string {
+	if i < 10 {
+		return "0" + ToString(i)
+	}
+	return ToString(i)
+}
