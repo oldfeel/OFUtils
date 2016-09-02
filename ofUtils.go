@@ -182,3 +182,6 @@ func ZeroBefore(i int) string {
 	}
 	return ToString(i)
 }
+func GetTimeStamp() string {
+	return time.Now().Format("20060102150405")
+}
