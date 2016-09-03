@@ -14,6 +14,7 @@ import (
 	"time"
 
 	"github.com/astaxie/beego/orm"
+	"github.com/axgle/mahonia"
 )
 
 func init() {
@@ -184,4 +185,8 @@ func ZeroBefore(i int) string {
 }
 func GetTimeStamp() string {
 	return time.Now().Format("20060102150405")
+}
+func Utf8ToGBK(text string) string {
+	enc := mahonia.NewEncoder("gbk")
+	return enc.ConvertString(text)
 }
