@@ -13,7 +13,7 @@ func SendQQMail(email, password, host string, port int, from, toEmail, subject, 
 	header["From"] = from + " " + "<" + email + ">"
 	header["To"] = toEmail
 	header["Subject"] = subject
-	header["Content-Type"] = "text/html; charset=UTF-8"
+	header["Content-Type"] = "text/html; charset=GBK"
 
 	message := ""
 	for k, v := range header {
