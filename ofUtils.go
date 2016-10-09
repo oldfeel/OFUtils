@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"io"
 	"math/rand"
 	"net/smtp"
 	"os"
@@ -189,4 +190,22 @@ func GetTimeStamp() string {
 func Utf8ToGBK(text string) string {
 	enc := mahonia.NewEncoder("gbk")
 	return enc.ConvertString(text)
+}
+func Copy(dst, src string) error {
+	in, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer in.Close()
+	out, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+	_, err = io.Copy(out, in)
+	cerr := out.Close()
+	if err != nil {
+		return err
+	}
+	return cerr
 }
