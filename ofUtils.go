@@ -11,6 +11,7 @@ import (
 	"math/rand"
 	"net/smtp"
 	"os"
+	"reflect"
 	"sort"
 	"strconv"
 	"strings"
@@ -242,4 +243,12 @@ func Copy(dst, src string) error {
 		return err
 	}
 	return cerr
+}
+
+func GetStructName(myvar interface{}) string {
+	if t := reflect.TypeOf(myvar); t.Kind() == reflect.Ptr {
+		return t.Elem().Name()
+	} else {
+		return t.Name()
+	}
 }
