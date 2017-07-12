@@ -37,7 +37,15 @@ func RandString(n int) string {
 	}
 	return string(b)
 }
-
+func ChangeJson(data []byte, key string, value interface{}) ([]byte, error) {
+	var m map[string]interface{}
+	err := json.Unmarshal(data, &m)
+	if err != nil {
+		return nil, err
+	}
+	m[key] = value
+	return json.Marshal(m)
+}
 func MD5(text string) string {
 	hasher := md5.New()
 	hasher.Write([]byte(text))
