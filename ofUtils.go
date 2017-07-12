@@ -261,3 +261,11 @@ func GetStructName(myvar interface{}) string {
 		return t.Name()
 	}
 }
+
+func ByteToMapArray(data [][]byte) []map[string]interface{} {
+	list := make([]map[string]interface{}, len(data))
+	for i, v := range data {
+		json.Unmarshal(v, &list[i])
+	}
+	return list
+}
