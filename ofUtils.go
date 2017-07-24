@@ -9,6 +9,7 @@ import (
 	"io"
 	"log"
 	"math/rand"
+	"net"
 	"net/smtp"
 	"os"
 	"reflect"
@@ -268,4 +269,16 @@ func ByteToMapArray(data [][]byte) []map[string]interface{} {
 		json.Unmarshal(v, &list[i])
 	}
 	return list
+}
+
+func GetOutboundIP() string {
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+	return localAddr.IP.String()
 }
