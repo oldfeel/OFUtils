@@ -271,14 +271,19 @@ func ByteToMapArray(data [][]byte) []map[string]interface{} {
 	return list
 }
 
-func GetOutboundIP() string {
-	conn, err := net.Dial("udp", "8.8.8.8:80")
+// GetLocalIP returns the non loopback local IP of the host
+func GetLocalIP() string {
+	addrs, err := net.InterfaceAddrs()
 	if err != nil {
-		log.Fatal(err)
+		return ""
 	}
-	defer conn.Close()
-
-	localAddr := conn.LocalAddr().(*net.UDPAddr)
-
-	return localAddr.IP.String()
+	for _, address := range addrs {
+		// check the address type and if it is not a loopback the display it
+		if ipnet, ok := address.(*net.IPNet); ok && !ipnet.IP.IsLoopback() {
+			if ipnet.IP.To4() != nil {
+				return ipnet.IP.String()
+			}
+		}
+	}
+	return ""
 }
