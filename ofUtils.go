@@ -79,6 +79,12 @@ func ToInt(val interface{}) int {
 	} else {
 		return 0
 	}
+	b, ok := val.(bool)
+	if ok && b {
+		return 1
+	} else {
+		return 0
+	}
 }
 
 func GetWeekFirstDay() string {
