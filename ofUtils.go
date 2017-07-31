@@ -73,15 +73,17 @@ func ToInt(val interface{}) int {
 		}
 		return i
 	}
+	b, ok := val.(bool)
+	if ok {
+		if b {
+			return 1
+		} else {
+			return 0
+		}
+	}
 	i, ok := val.(int)
 	if ok {
 		return i
-	} else {
-		return 0
-	}
-	b, ok := val.(bool)
-	if ok && b {
-		return 1
 	} else {
 		return 0
 	}
