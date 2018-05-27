@@ -1,11 +1,13 @@
 package ofutils
 
 import (
+	"bytes"
 	"crypto/md5"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"math/rand"
 	"net"
 	"net/smtp"
@@ -18,6 +20,8 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	"github.com/axgle/mahonia"
+	"golang.org/x/text/encoding/simplifiedchinese"
+	"golang.org/x/text/transform"
 )
 
 func init() {
@@ -209,6 +213,22 @@ func GetTimeStamp() string {
 func Utf8ToGBK(text string) string {
 	enc := mahonia.NewEncoder("gbk")
 	return enc.ConvertString(text)
+}
+func GbkToUtf8(s []byte) ([]byte, error) {
+	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewDecoder())
+	d, e := ioutil.ReadAll(reader)
+	if e != nil {
+		return nil, e
+	}
+	return d, nil
+}
+func Utf8ToGbk(s []byte) ([]byte, error) {
+	reader := transform.NewReader(bytes.NewReader(s), simplifiedchinese.GBK.NewEncoder())
+	d, e := ioutil.ReadAll(reader)
+	if e != nil {
+		return nil, e
+	}
+	return d, nil
 }
 func TrimSuffix(s, suffix string) string {
 	if strings.HasSuffix(s, suffix) {
