@@ -88,6 +88,13 @@ func ToInt(val interface{}) int {
 	}
 }
 
+func ToBool(i int) bool {
+	if i == 0 {
+		return false
+	}
+	return true
+}
+
 func GetWeekFirstDay() string {
 	week := time.Now().Weekday().String()
 	var day time.Duration
