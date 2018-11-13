@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"math"
 	"math/rand"
 	"net"
 	"net/smtp"
@@ -58,6 +59,13 @@ func ToString(str interface{}) string {
 		return ""
 	}
 	return fmt.Sprintf("%v", str)
+}
+
+func FloatToString(f float64) string {
+	shift := math.Pow(10, float64(2))
+	fv := 0.0000000001 + f //对浮点数产生.xxx999999999 计算不准进行处理
+	value, _ := strconv.ParseFloat(fmt.Sprintf("%.2f", math.Floor(fv*shift+.5)/shift), 64)
+	return ToString(value)
 }
 
 func ToInt(val interface{}) int {
