@@ -71,6 +71,9 @@ type Options struct {
 
 func MysqlBackup(username, password, databases, mysqldumppath string) {
 	options := GetOptions(username, password, databases, mysqldumppath)
+	if options == nil {
+		return
+	}
 
 	for _, db := range options.Databases {
 		printMessage("Processing Database : "+db, options.Verbosity, Info)
@@ -305,7 +308,8 @@ func generateTableBackup(options Options, db string, table Table) {
 
 		if string(err) != "" {
 			printMessage("mysqldump error is: "+string(err), options.Verbosity, Error)
-			os.Exit(4)
+			return
+			// os.Exit(4)
 		}
 
 		// Compressing
@@ -316,7 +320,8 @@ func generateTableBackup(options Options, db string, table Table) {
 
 		if errcreate != nil {
 			printMessage("error to create a compressed file: "+filename, options.Verbosity, Error)
-			os.Exit(4)
+			return
+			// os.Exit(4)
 		}
 
 		defer file.Close()
@@ -329,7 +334,8 @@ func generateTableBackup(options Options, db string, table Table) {
 		if errcompress := Compress(tw, filename); errcompress != nil {
 			printMessage("1 errcompress: "+errcompress.Error(), options.Verbosity, Error)
 			printMessage("error to compress file: "+filename, options.Verbosity, Error)
-			os.Exit(4)
+			return
+			// os.Exit(4)
 		}
 
 		index++
@@ -376,7 +382,8 @@ func generateSchemaBackup(options Options, db string) {
 
 	if string(err) != "" {
 		printMessage("mysqldump error is: "+string(err), options.Verbosity, Error)
-		os.Exit(4)
+		return
+		// os.Exit(4)
 	}
 
 	// Compressing
@@ -387,7 +394,8 @@ func generateSchemaBackup(options Options, db string) {
 
 	if errcreate != nil {
 		printMessage("error to create a compressed file: "+filename, options.Verbosity, Error)
-		os.Exit(4)
+		return
+		// os.Exit(4)
 	}
 
 	defer file.Close()
@@ -400,7 +408,8 @@ func generateSchemaBackup(options Options, db string) {
 	if errcompress := Compress(tw, filename); errcompress != nil {
 		printMessage("2 errcompress: "+errcompress.Error(), options.Verbosity, Error)
 		printMessage("error to compress file: "+filename, options.Verbosity, Error)
-		os.Exit(4)
+		return
+		// os.Exit(4)
 	}
 
 	printMessage("Schema backup successfull : "+db, options.Verbosity, Info)
@@ -446,7 +455,8 @@ func generateSingleFileDataBackup(options Options, db string) {
 
 	if string(err) != "" {
 		printMessage("mysqldump error is: "+string(err), options.Verbosity, Error)
-		os.Exit(4)
+		return
+		// os.Exit(4)
 	}
 
 	// Compressing
@@ -457,7 +467,8 @@ func generateSingleFileDataBackup(options Options, db string) {
 
 	if errcreate != nil {
 		printMessage("error to create a compressed file: "+filename, options.Verbosity, Error)
-		os.Exit(4)
+		return
+		// os.Exit(4)
 	}
 
 	defer file.Close()
@@ -470,7 +481,8 @@ func generateSingleFileDataBackup(options Options, db string) {
 	if errcompress := Compress(tw, filename); errcompress != nil {
 		printMessage("3 errcompress: "+errcompress.Error(), options.Verbosity, Error)
 		printMessage("error to compress file: "+filename, options.Verbosity, Error)
-		os.Exit(4)
+		return
+		// os.Exit(4)
 	}
 
 	printMessage("Single file data backup successfull : "+db, options.Verbosity, Info)
@@ -516,7 +528,8 @@ func generateSingleFileBackup(options Options, db string) {
 
 	if string(err) != "" && !strings.Contains(string(err), "[Warning]") {
 		printMessage("mysqldump error is: "+string(err), options.Verbosity, Error)
-		os.Exit(4)
+		return
+		// os.Exit(4)
 	}
 
 	// Compressing
@@ -527,7 +540,8 @@ func generateSingleFileBackup(options Options, db string) {
 
 	if errcreate != nil {
 		printMessage("error to create a compressed file: "+filename, options.Verbosity, Error)
-		os.Exit(4)
+		return
+		// os.Exit(4)
 	}
 
 	defer file.Close()
@@ -540,7 +554,8 @@ func generateSingleFileBackup(options Options, db string) {
 	if errcompress := Compress(tw, filename); errcompress != nil {
 		printMessage("4 errcompress: "+errcompress.Error(), options.Verbosity, Error)
 		printMessage("error to compress file: "+filename, options.Verbosity, Error)
-		os.Exit(4)
+		return
+		// os.Exit(4)
 	}
 
 	printMessage("Single file backup successfull : "+db, options.Verbosity, Info)
@@ -898,7 +913,8 @@ func GetOptions(default_username, default_password, default_databases, default_m
 
 	if _, err := os.Stat(mysqldumppath); os.IsNotExist(err) {
 		printMessage("mysqldump binary can not be found, please specify correct value for mysqldump-path parameter", verbosity, Error)
-		os.Exit(1)
+		return nil
+		// os.Exit(1)
 	}
 
 	os.MkdirAll(outputdir+"/daily/"+timeNow.Format("2006-01-02"), os.ModePerm)
@@ -944,10 +960,12 @@ func GetOptions(default_username, default_password, default_databases, default_m
 
 		if string(err) != "" {
 			printMessage("mysqldump error is: "+string(err), opts.Verbosity, Error)
-			os.Exit(4)
+			return nil
+			// os.Exit(4)
 		}
 
-		os.Exit(4)
+		return nil
+		// os.Exit(4)
 	}
 
 	return opts
