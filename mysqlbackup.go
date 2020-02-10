@@ -5,7 +5,6 @@ import (
 	"compress/gzip"
 	"database/sql"
 	"encoding/json"
-	"flag"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -850,64 +849,45 @@ func WriteToFile(filePath string, msg string) {
 // GetOptions creates Options type from Commandline arguments
 func GetOptions(default_username, default_password, default_databases, default_mysqldumppath string) *Options {
 
-	var hostname string
-	flag.StringVar(&hostname, "hostname", "localhost", "Hostname of the mysql server to connect to")
+	hostname := "hostname"
 
-	var bind string
-	flag.StringVar(&bind, "bind", "3306", "Port of the mysql server to connect to")
+	bind := "3306"
 
-	var username string
-	flag.StringVar(&username, "username", default_username, "username of the mysql server to connect to")
+	username := default_username
 
-	var password string
-	flag.StringVar(&password, "password", default_password, "password of the mysql server to connect to")
+	password := default_password
 
-	var databases string
-	flag.StringVar(&databases, "databases", default_databases, "List of databases as comma seperated values to dump. OBS: If not specified, --all-databases is the default")
+	databases := default_databases
 
-	var excludeddatabases string
-	flag.StringVar(&excludeddatabases, "excluded-databases", "", "List of databases excluded to be excluded. OBS: Only valid if -databases is not specified")
+	excludeddatabases := "excluded-databases"
 
-	var dbthreshold int
-	flag.IntVar(&dbthreshold, "dbthreshold", 10000000, "Do not split mysqldumps, if total rowcount of tables in database is less than dbthreshold value for whole database")
+	dbthreshold := 10000000
 
-	var tablethreshold int
-	flag.IntVar(&tablethreshold, "tablethreshold", 5000000, "Do not split mysqldumps, if rowcount of table is less than dbthreshold value for table")
+	tablethreshold := 5000000
 
-	var batchsize int
-	flag.IntVar(&batchsize, "batchsize", 1000000, "Split mysqldumps in order to get each file contains batchsize number of records")
+	batchsize := 1000000
 
-	var forcesplit bool
-	flag.BoolVar(&forcesplit, "forcesplit", false, "Split schema and data dumps even if total rowcount of tables in database is less than dbthreshold value. if false one dump file will be created")
+	forcesplit := false
 
-	var additionals string
-	flag.StringVar(&additionals, "additionals", "", "Additional parameters that will be appended to mysqldump command")
+	additionals := ""
 
-	var verbosity int
-	flag.IntVar(&verbosity, "verbosity", 2, "0 = only errors, 1 = important things, 2 = all")
+	verbosity := 2
 
-	var mysqldumppath string
-	flag.StringVar(&mysqldumppath, "mysqldump-path", default_mysqldumppath, "Absolute path for mysqldump executable.")
+	mysqldumppath := default_mysqldumppath
 
 	outputdir, err := os.Getwd()
 	if err != nil {
 		printMessage(err.Error(), verbosity, Error)
 	}
-	flag.StringVar(&outputdir, "output-dir", outputdir+"/dumps", "Default is the value of os.Getwd(). The backup files will be placed to output-dir /{DATABASE_NAME}/{DATABASE_NAME}_{TABLENAME|SCHEMA|DATA|ALL}_{TIMESTAMP}.sql")
+	outputdir += "/dumps"
 
-	var dailyrotation int
-	flag.IntVar(&dailyrotation, "daily-rotation", 5, "Number of days of retention")
+	dailyrotation := 5
 
-	var weeklyrotation int
-	flag.IntVar(&weeklyrotation, "weekly-rotation", 2, "Number of weeks of retention")
+	weeklyrotation := 2
 
-	var monthlyrotation int
-	flag.IntVar(&monthlyrotation, "monthly-rotation", 1, "Number of months of retention")
+	monthlyrotation := 1
 
-	var test bool
-	flag.BoolVar(&test, "test", false, "test")
-
-	flag.Parse()
+	test := false
 
 	defaultsProvidedByUser := true
 
