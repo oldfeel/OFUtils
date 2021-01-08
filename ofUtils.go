@@ -3,9 +3,12 @@ package ofutils
 import (
 	"bytes"
 	"crypto/md5"
+	"encoding/base64"
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"image"
+	"image/jpeg"
 	"io"
 	"io/ioutil"
 	"math"
@@ -357,4 +360,15 @@ func IsNumeric(val interface{}) bool {
 	}
 
 	return false
+}
+
+func ImageToBase64(img image.Image) (string, error) {
+	buf := new(bytes.Buffer)
+	err := jpeg.Encode(buf, img, nil)
+	if err != nil {
+		fmt.Println(err.Error())
+		return "", err
+	}
+	encoded := base64.StdEncoding.EncodeToString(buf.Bytes())
+	return encoded, err
 }
